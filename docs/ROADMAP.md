@@ -58,7 +58,7 @@ The "handles complex data at ease" phase — this is what sells the live demo.
 - UI polish pass: empty states, error pages.
 
 ## Status
-- [ ] Phase 0
+- [x] Phase 0
 - [ ] Phase 1
 - [ ] Phase 2
 - [ ] Phase 3
