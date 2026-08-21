@@ -3,6 +3,10 @@
 Gym membership CRM + admin CMS for the public site. Laravel 12, Blade, Livewire 4, Alpine, Tailwind 3,
 Vite 7, Breeze auth, MySQL. No role/permission layer yet — `/admin/*` is gated by `auth` only.
 
+User-uploaded images (client photos, website CMS images) go through `App\Services\ImageUploadService`
+onto `config('filesystems.uploads_disk')` — `public` (local dev) or `b2` (Backblaze B2, S3-compatible,
+private bucket + signed URLs) — see `docs/DECISIONS.md` (2026-08-21).
+
 Docs: `docs/ARCHITECTURE.md` (module map), `docs/DECISIONS.md` (why), `docs/modules/*.md` (per feature),
 `docs/DEPLOYMENT.md` (hosting, on hold).
 

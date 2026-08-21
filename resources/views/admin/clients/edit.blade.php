@@ -8,6 +8,7 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <livewire:admin.edit-client-name :client="$client" />
+            <livewire:admin.edit-client-photo :client="$client" />
 
             <div class="bg-white shadow-sm rounded-lg p-6">
                 <form method="POST" action="{{ route('admin.clients.update', $client) }}">

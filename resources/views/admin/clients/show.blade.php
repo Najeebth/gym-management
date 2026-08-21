@@ -1,9 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ $client->full_name }}
-            </h2>
+            <div class="flex items-center gap-4">
+                @if ($client->photo_path)
+                    <img src="{{ $client->photo_url }}" class="h-12 w-12 rounded-full object-cover">
+                @endif
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ $client->full_name }}
+                </h2>
+            </div>
             <a href="{{ route('admin.clients.edit', $client) }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
                 Edit

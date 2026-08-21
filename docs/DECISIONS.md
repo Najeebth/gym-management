@@ -27,6 +27,23 @@ as static markup (no npm package/JS dependency added, zero bundle cost) — colo
 existing Tailwind text classes. No distinct "obese" icon exists upstream, so Obese reuses the Overweight
 artwork scaled up slightly.
 
+## 2026-08-21 — User-uploaded images go to Backblaze B2 (S3-compatible), not local disk
+Local `public` disk (used since Phase pre-1) doesn't survive a redeploy off a container, doesn't scale
+past one app server, and every image request competes with the app for this VM's CPU/bandwidth/disk I/O.
+Considered AWS S3 (12-month free tier only, then paid, requires a card), DigitalOcean Spaces ($5/month
+flat, no free tier), Cloudflare R2 (free tier, but activating R2 requires a card on file even at $0
+usage), MinIO self-hosted (free, no card, but only useful for local dev — still need real storage for
+the live demo), and Backblaze B2 (10GB free forever, no card required, real S3-compatible API — usable
+for both local dev and the live deploy without switching providers). Picked B2.
+
+Bucket is **private** (public buckets require a paid plan on B2), so images are served via short-lived
+signed URLs (`ImageUploadService::url()`, `Storage::disk('b2')->temporaryUrl()`), not permanent public
+links — regenerated per page load. `config('filesystems.uploads_disk')` (env `UPLOADS_DISK`) switches
+between `public` (local dev fallback, no B2 credentials needed) and `b2`, so the disk is swappable
+without touching call sites. `storeImage`/`deleteImage` logic, previously duplicated per-service, was
+pulled out into `App\Services\ImageUploadService` used by both `WebsiteService` (CMS images) and the new
+client photo feature.
+
 ## 2026-08-18 — Hosting: Oracle Cloud Always Free VM, on hold
 Considered Render/Railway (sleep or resource-capped free tiers), Hostinger/GoDaddy (fixed-term billing,
 bad fit for "pause between job searches"), Hetzner/DigitalOcean (cheapest paid option if free isn't

@@ -60,7 +60,34 @@ return [
             'report' => false,
         ],
 
+        // Backblaze B2, accessed via its S3-compatible API. Bucket is private;
+        // see ImageUploadService::url() for temporary signed URL generation.
+        'b2' => [
+            'driver' => 's3',
+            'key' => env('B2_ACCESS_KEY_ID'),
+            'secret' => env('B2_SECRET_ACCESS_KEY'),
+            'region' => env('B2_REGION'),
+            'bucket' => env('B2_BUCKET'),
+            'endpoint' => env('B2_ENDPOINT'),
+            'use_path_style_endpoint' => false,
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Uploads Disk
+    |--------------------------------------------------------------------------
+    |
+    | Which disk user-uploaded files (client photos, website CMS images) are
+    | stored on. "public" for local dev without B2 credentials, "b2" once
+    | Backblaze B2 is configured above.
+    |
+    */
+
+    'uploads_disk' => env('UPLOADS_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------

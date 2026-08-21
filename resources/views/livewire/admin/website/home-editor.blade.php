@@ -28,7 +28,7 @@
                     <x-input-label value="Hero image" />
                     @if ($existingHeroImagePath)
                         <div class="mt-2 flex items-center gap-4">
-                            <img src="{{ Storage::disk('public')->url($existingHeroImagePath) }}" class="h-20 rounded-md object-cover">
+                            <img src="{{ $this->heroImageUrl() }}" class="h-20 rounded-md object-cover">
                             <button type="button" wire:click="removeHeroImage" wire:confirm="Remove this image?"
                                 class="text-red-600 text-sm hover:text-red-800">Remove image</button>
                         </div>

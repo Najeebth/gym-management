@@ -4,13 +4,17 @@ namespace App\Services;
 
 use App\Models\SiteSetting;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
 {
+    public function __construct(private ImageUploadService $images) {}
+
     public function getHome(): array
     {
-        return array_merge($this->homeDefaults(), SiteSetting::get('home'));
+        $home = array_merge($this->homeDefaults(), SiteSetting::get('home'));
+        $home['hero_image_url'] = $this->images->url($home['hero_image_path']);
+
+        return $home;
     }
 
     public function updateHome(array $data): void
@@ -20,7 +24,10 @@ class WebsiteService
 
     public function getAbout(): array
     {
-        return array_merge($this->aboutDefaults(), SiteSetting::get('about'));
+        $about = array_merge($this->aboutDefaults(), SiteSetting::get('about'));
+        $about['main_image_url'] = $this->images->url($about['main_image_path']);
+
+        return $about;
     }
 
     public function updateAbout(array $data): void
@@ -50,18 +57,12 @@ class WebsiteService
 
     public function storeImage(UploadedFile $file, string $directory, ?string $previousPath = null): string
     {
-        $path = $file->store($directory, 'public');
-
-        $this->deleteImage($previousPath);
-
-        return $path;
+        return $this->images->store($file, $directory, $previousPath);
     }
 
     public function deleteImage(?string $path): void
     {
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
-        }
+        $this->images->delete($path);
     }
 
     private function homeDefaults(): array

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Website;
 
+use App\Services\ImageUploadService;
 use App\Services\WebsiteService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -105,6 +106,11 @@ class HomeEditor extends Component
 
         $home = $websiteService->getHome();
         $websiteService->updateHome([...$home, 'hero_image_path' => null]);
+    }
+
+    public function heroImageUrl(): ?string
+    {
+        return app(ImageUploadService::class)->url($this->existingHeroImagePath);
     }
 
     public function render()

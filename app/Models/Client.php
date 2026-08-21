@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\ImageUploadService;
+use Database\Factories\ClientFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
 {
-    /** @use HasFactory<\Database\Factories\ClientFactory> */
+    /** @use HasFactory<ClientFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -17,6 +19,7 @@ class Client extends Model
         'created_by',
         'first_name',
         'last_name',
+        'photo_path',
         'email',
         'phone',
         'date_of_birth',
@@ -82,5 +85,10 @@ class Client extends Model
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        return app(ImageUploadService::class)->url($this->photo_path);
     }
 }

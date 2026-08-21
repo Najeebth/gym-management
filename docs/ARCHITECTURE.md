@@ -7,14 +7,14 @@ no API layer) · MySQL.
 ## Layers
 - **Controllers** (`app/Http/Controllers`) — thin, delegate to Services.
 - **Services** (`app/Services`) — business logic: `MembershipPlanService`, `NavigationService`,
-  `WebsiteService`.
+  `WebsiteService`, `ImageUploadService` (shared upload/delete/signed-URL logic, see `docs/DECISIONS.md`).
 - **Livewire** (`app/Livewire`) — interactive admin/CMS islands: client name edit, website section editors.
 - **Models** (`app/Models`) — `Client`, `MembershipPlan`, `SiteSetting`, `NavigationItem`, `User`.
 
 ## Modules (see `docs/modules/`)
 | Module | Status |
 |---|---|
-| Client roster (CRUD, admin) | done |
+| Client roster (CRUD, admin, profile photo) | done |
 | Membership plans (CRUD, ordering) | done |
 | Website CMS (home/about/contact/footer/nav editors) | done |
 | Public landing page | in progress — see `modules/landing-page.md` |

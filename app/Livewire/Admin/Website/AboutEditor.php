@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Website;
 
+use App\Services\ImageUploadService;
 use App\Services\WebsiteService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -75,6 +76,11 @@ class AboutEditor extends Component
 
         $about = $websiteService->getAbout();
         $websiteService->updateAbout([...$about, 'main_image_path' => null]);
+    }
+
+    public function mainImageUrl(): ?string
+    {
+        return app(ImageUploadService::class)->url($this->existingMainImagePath);
     }
 
     public function render()

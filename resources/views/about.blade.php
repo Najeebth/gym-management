@@ -8,7 +8,7 @@
                 @endif
             </div>
             @if ($about['main_image_path'])
-                <img src="{{ Storage::disk('public')->url($about['main_image_path']) }}" class="rounded-xl shadow-xl w-full">
+                <img src="{{ $about['main_image_url'] }}" class="rounded-xl shadow-xl w-full">
             @endif
         </div>
 

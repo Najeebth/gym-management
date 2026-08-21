@@ -124,9 +124,13 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-5 py-3">
                                         <a href="{{ route('admin.clients.show', $client) }}" class="flex items-center gap-3 group">
-                                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-semibold text-xs">
-                                                {{ strtoupper(substr($client->first_name, 0, 1) . substr($client->last_name, 0, 1)) }}
-                                            </span>
+                                            @if ($client->photo_path)
+                                                <img src="{{ $client->photo_url }}" class="h-9 w-9 shrink-0 rounded-full object-cover">
+                                            @else
+                                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-semibold text-xs">
+                                                    {{ strtoupper(substr($client->first_name, 0, 1) . substr($client->last_name, 0, 1)) }}
+                                                </span>
+                                            @endif
                                             <span>
                                                 <span class="block font-medium text-gray-900 group-hover:text-indigo-600">{{ $client->full_name }}</span>
                                                 <span class="block text-xs text-gray-400">{{ $client->email }}</span>

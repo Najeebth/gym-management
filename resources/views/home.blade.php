@@ -48,7 +48,7 @@
                 </div>
             </div>
             @if ($home['hero_image_path'])
-                <img src="{{ Storage::disk('public')->url($home['hero_image_path']) }}" class="rounded-2xl shadow-2xl w-full ring-1 ring-white/10">
+                <img src="{{ $home['hero_image_url'] }}" class="rounded-2xl shadow-2xl w-full ring-1 ring-white/10">
             @else
                 <div class="hidden md:flex aspect-[4/3] rounded-2xl bg-gradient-to-br from-indigo-800/50 to-gray-800 ring-1 ring-white/10 items-center justify-center">
                     <svg class="h-24 w-24 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">

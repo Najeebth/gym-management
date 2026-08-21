@@ -29,7 +29,7 @@
             <x-input-label value="Main image" />
             @if ($existingMainImagePath)
                 <div class="mt-2 flex items-center gap-4">
-                    <img src="{{ Storage::disk('public')->url($existingMainImagePath) }}" class="h-20 rounded-md object-cover">
+                    <img src="{{ $this->mainImageUrl() }}" class="h-20 rounded-md object-cover">
                     <button type="button" wire:click="removeMainImage" wire:confirm="Remove this image?"
                         class="text-red-600 text-sm hover:text-red-800">Remove image</button>
                 </div>
