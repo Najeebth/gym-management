@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Client;
 use App\Models\MembershipPlan;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +13,7 @@ class ClientCrudTest extends TestCase
 
     public function test_admin_can_create_a_client(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
 
         $response = $this->actingAs($admin)->post(route('admin.clients.store'), [
@@ -38,7 +37,7 @@ class ClientCrudTest extends TestCase
 
     public function test_client_creation_requires_a_valid_membership_plan(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
 
         $response = $this->actingAs($admin)->post(route('admin.clients.store'), [
             'membership_plan_id' => 999,

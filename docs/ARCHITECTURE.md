@@ -18,7 +18,8 @@ no API layer) · MySQL.
 | Membership plans (CRUD, ordering) | done |
 | Website CMS (home/about/contact/footer/nav editors) | done |
 | Public landing page | in progress — see `modules/landing-page.md` |
-| Auth | Breeze default, no roles/permissions |
+| Auth | Breeze default |
+| Access control (roles/permissions) | done — see `modules/access-control.md` |
 | Trainers, classes, attendance, payments | not started |
 
 ## When adding a module

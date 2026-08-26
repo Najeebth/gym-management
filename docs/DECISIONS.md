@@ -2,6 +2,25 @@
 
 Short dated log. Format: what, why.
 
+## 2026-08-26 — Role/permission layer: spatie/laravel-permission, not a hand-rolled `role` column
+Considered a plain `role` enum column on `users` — simpler, but one-to-one only, and "who can edit
+membership pricing vs. who can edit the public website" needs more than two buckets long-term.
+`spatie/laravel-permission` gives roles *and* granular permissions (many-to-many, polymorphic
+`model_has_roles`/`model_has_permissions` pivots) for the cost of one package, and every permission
+name is auto-registered as a Laravel Gate ability, so `@can`/`@canany` in Blade and the `can` route
+middleware work without any custom Gate::define calls. Installed v6.25 (not the newer 8.x line — that
+requires PHP ^8.3, which this environment doesn't have).
+
+Two roles seeded (`database/seeders/RoleSeeder.php`): `admin` (all permissions) and `staff`
+(`manage-clients` only) — matches the actual need (front-desk staff manage clients day-to-day; pricing
+and public-site content stay admin-only). Three permissions instead of a single generic "admin access"
+flag, so a future narrower role (e.g. read-only reporting) can be added without restructuring.
+
+`/admin/*` routes are gated two levels deep: `role:admin|staff` at the group level (must be logged in
+and hold a recognized admin-side role), then `permission:<name>` on specific route groups (clients vs.
+website CMS vs. membership-plan pricing). Nav links use `@can`/`@canany` so Staff never see a link to a
+page that would 403 them — see `docs/modules/access-control.md`.
+
 ## 2026-08-18 — DB is MySQL, not SQLite
 Framework default is SQLite; project already runs MySQL. Matters for hosting choice — rules out hosts
 that can't attach a persistent MySQL DB.

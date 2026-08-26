@@ -5,7 +5,6 @@ namespace Tests\Feature\Livewire\Admin;
 use App\Livewire\Admin\EditClientPhoto;
 use App\Models\Client;
 use App\Models\MembershipPlan;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +19,7 @@ class EditClientPhotoTest extends TestCase
     {
         Storage::fake(config('filesystems.uploads_disk'));
 
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create(['photo_path' => null]);
 
@@ -40,7 +39,7 @@ class EditClientPhotoTest extends TestCase
     {
         Storage::fake(config('filesystems.uploads_disk'));
 
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create([
             'photo_path' => 'uploads/clients/old.jpg',
@@ -59,7 +58,7 @@ class EditClientPhotoTest extends TestCase
     {
         Storage::fake(config('filesystems.uploads_disk'));
 
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create([
             'photo_path' => 'uploads/clients/existing.jpg',
@@ -77,7 +76,7 @@ class EditClientPhotoTest extends TestCase
 
     public function test_photo_must_be_an_image(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create();
 

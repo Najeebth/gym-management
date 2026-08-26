@@ -1,7 +1,8 @@
 # CLAUDE.md
 
 Gym membership CRM + admin CMS for the public site. Laravel 12, Blade, Livewire 4, Alpine, Tailwind 3,
-Vite 7, Breeze auth, MySQL. No role/permission layer yet — `/admin/*` is gated by `auth` only.
+Vite 7, Breeze auth, MySQL. `/admin/*` is gated by role (`admin`/`staff`) and permission via
+`spatie/laravel-permission` — see `docs/modules/access-control.md`.
 
 User-uploaded images (client photos, website CMS images) go through `App\Services\ImageUploadService`
 onto `config('filesystems.uploads_disk')` — `public` (local dev) or `b2` (Backblaze B2, S3-compatible,

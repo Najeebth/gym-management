@@ -21,6 +21,11 @@ if time runs short; everything else is either a dependency or a portfolio-critic
 - Role/permission layer (`spatie/laravel-permission`) — Admin vs Staff at minimum.
 - Gate `/admin/*` by role, not just `auth`.
 - Do this before other modules so "who can do this" isn't bolted on per-feature later.
+- After roles are in: WhatsApp message confirmation on client creation, via WhatsApp Business Cloud
+  API test/sandbox account (free, no billing — 5 verified test recipients). `App\Services\WhatsAppService`
+  wraps the Graph API `POST /{phone_number_id}/messages` call, fired from client creation, fail-soft
+  (logged, doesn't block creation) since sandbox credentials won't exist in every environment. See
+  `docs/modules/whatsapp-notifications.md` (to be created) for setup + sandbox limitations.
 
 ### Phase 2 — Trainers → Classes → Attendance (4–6 days)
 - Migrations/models/services following the existing pattern (`docs/ARCHITECTURE.md`).
@@ -59,7 +64,7 @@ The "handles complex data at ease" phase — this is what sells the live demo.
 
 ## Status
 - [x] Phase 0
-- [ ] Phase 1
+- [ ] Phase 1 — access control done, WhatsApp confirmation still pending
 - [ ] Phase 2
 - [ ] Phase 3
 - [ ] Phase 4

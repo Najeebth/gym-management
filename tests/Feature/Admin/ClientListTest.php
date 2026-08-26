@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Client;
 use App\Models\MembershipPlan;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -15,7 +14,7 @@ class ClientListTest extends TestCase
 
     public function test_admin_client_index_does_not_n_plus_one(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plans = MembershipPlan::factory()->count(3)->create();
         Client::factory()->count(50)->recycle($plans)->create();
 

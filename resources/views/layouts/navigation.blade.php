@@ -19,27 +19,35 @@
                         {{ __('Clients') }}
                     </x-nav-link>
 
-                    <x-dropdown align="left" width="56" :hover="true">
-                        <x-slot name="trigger">
-                            <button type="button" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 focus:outline-none transition duration-150 ease-in-out
-                                {{ request()->routeIs('admin.website.*') ? 'border-indigo-400 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                                {{ __('Website CMS') }}
-                                <svg class="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </x-slot>
+                    @canany(['edit-website', 'manage-membership-plans'])
+                        <x-dropdown align="left" width="56" :hover="true">
+                            <x-slot name="trigger">
+                                <button type="button" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 focus:outline-none transition duration-150 ease-in-out
+                                    {{ request()->routeIs('admin.website.*') ? 'border-indigo-400 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                                    {{ __('Website CMS') }}
+                                    <svg class="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </x-slot>
 
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('admin.website.index')">{{ __('Overview') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.home')">{{ __('Home Page') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.about')">{{ __('About Us') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.membership-plans')">{{ __('Membership Plans') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.contact')">{{ __('Contact') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.navigation')">{{ __('Navigation') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.website.footer')">{{ __('Footer') }}</x-dropdown-link>
-                        </x-slot>
-                    </x-dropdown>
+                            <x-slot name="content">
+                                @can('edit-website')
+                                    <x-dropdown-link :href="route('admin.website.index')">{{ __('Overview') }}</x-dropdown-link>
+                                    <x-dropdown-link :href="route('admin.website.home')">{{ __('Home Page') }}</x-dropdown-link>
+                                    <x-dropdown-link :href="route('admin.website.about')">{{ __('About Us') }}</x-dropdown-link>
+                                @endcan
+                                @can('manage-membership-plans')
+                                    <x-dropdown-link :href="route('admin.website.membership-plans')">{{ __('Membership Plans') }}</x-dropdown-link>
+                                @endcan
+                                @can('edit-website')
+                                    <x-dropdown-link :href="route('admin.website.contact')">{{ __('Contact') }}</x-dropdown-link>
+                                    <x-dropdown-link :href="route('admin.website.navigation')">{{ __('Navigation') }}</x-dropdown-link>
+                                    <x-dropdown-link :href="route('admin.website.footer')">{{ __('Footer') }}</x-dropdown-link>
+                                @endcan
+                            </x-slot>
+                        </x-dropdown>
+                    @endcanany
                 </div>
             </div>
 
@@ -98,9 +106,11 @@
             <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">
                 {{ __('Clients') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.website.index')" :active="request()->routeIs('admin.website.*')">
-                {{ __('Website CMS') }}
-            </x-responsive-nav-link>
+            @canany(['edit-website', 'manage-membership-plans'])
+                <x-responsive-nav-link :href="route('admin.website.index')" :active="request()->routeIs('admin.website.*')">
+                    {{ __('Website CMS') }}
+                </x-responsive-nav-link>
+            @endcanany
         </div>
 
         <!-- Responsive Settings Options -->

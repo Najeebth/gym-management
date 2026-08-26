@@ -5,7 +5,6 @@ namespace Tests\Feature\Livewire\Admin;
 use App\Livewire\Admin\EditClientName;
 use App\Models\Client;
 use App\Models\MembershipPlan;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -16,7 +15,7 @@ class EditClientNameTest extends TestCase
 
     public function test_admin_can_save_a_clients_name_independently(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create([
             'first_name' => 'Old',
@@ -40,7 +39,7 @@ class EditClientNameTest extends TestCase
 
     public function test_name_is_required(): void
     {
-        $admin = User::factory()->create();
+        $admin = $this->admin();
         $plan = MembershipPlan::factory()->create();
         $client = Client::factory()->recycle($plan)->create();
 

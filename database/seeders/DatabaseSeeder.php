@@ -18,15 +18,18 @@ class DatabaseSeeder extends Seeder
         // Local-only fallback admin for fresh `db:seed` runs. For a real admin
         // account, run `php artisan admin:create-or-update {email}` instead so the
         // password never passes through generated code.
-        User::updateOrCreate(
+        $localAdmin = User::updateOrCreate(
             ['email' => 'admin@example.com'],
             ['name' => 'Local Admin', 'password' => bcrypt('password')],
         );
 
         $this->call([
+            RoleSeeder::class,
             MembershipPlanSeeder::class,
             ClientSeeder::class,
             WebsiteCmsSeeder::class,
         ]);
+
+        $localAdmin->assignRole('admin');
     }
 }

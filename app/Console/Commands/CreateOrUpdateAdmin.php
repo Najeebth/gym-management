@@ -50,6 +50,8 @@ class CreateOrUpdateAdmin extends Command
             ['name' => $this->option('name'), 'password' => Hash::make($password)],
         );
 
+        $user->assignRole('admin');
+
         $this->info("Admin user ready: {$user->email}");
 
         return self::SUCCESS;

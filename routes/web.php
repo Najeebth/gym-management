@@ -19,18 +19,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
-    Route::resource('clients', ClientController::class);
+
+    Route::middleware('permission:manage-clients')->group(function () {
+        Route::resource('clients', ClientController::class);
+    });
 
     Route::prefix('website')->name('website.')->group(function () {
-        Route::get('/', [AdminWebsiteController::class, 'index'])->name('index');
-        Route::get('/home', [AdminWebsiteController::class, 'home'])->name('home');
-        Route::get('/about', [AdminWebsiteController::class, 'about'])->name('about');
-        Route::get('/contact', [AdminWebsiteController::class, 'contact'])->name('contact');
-        Route::get('/footer', [AdminWebsiteController::class, 'footer'])->name('footer');
-        Route::get('/navigation', [AdminWebsiteController::class, 'navigation'])->name('navigation');
-        Route::get('/membership-plans', [AdminWebsiteController::class, 'membershipPlans'])->name('membership-plans');
+        Route::middleware('permission:manage-membership-plans')->group(function () {
+            Route::get('/membership-plans', [AdminWebsiteController::class, 'membershipPlans'])->name('membership-plans');
+        });
+
+        Route::middleware('permission:edit-website')->group(function () {
+            Route::get('/', [AdminWebsiteController::class, 'index'])->name('index');
+            Route::get('/home', [AdminWebsiteController::class, 'home'])->name('home');
+            Route::get('/about', [AdminWebsiteController::class, 'about'])->name('about');
+            Route::get('/contact', [AdminWebsiteController::class, 'contact'])->name('contact');
+            Route::get('/footer', [AdminWebsiteController::class, 'footer'])->name('footer');
+            Route::get('/navigation', [AdminWebsiteController::class, 'navigation'])->name('navigation');
+        });
     });
 });
 
