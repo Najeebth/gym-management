@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendClientWelcome;
 use App\Models\Client;
 use App\Models\MembershipPlan;
 use Illuminate\Http\Request;
@@ -44,11 +45,18 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request);
+        $whatsAppOptedIn = (bool) ($data['whatsapp_opt_in'] ?? false);
+        unset($data['whatsapp_opt_in']);
 
         $client = Client::create([
             ...$data,
+            'whatsapp_opt_in_at' => $whatsAppOptedIn ? now() : null,
             'created_by' => $request->user()->id,
         ]);
+
+        if ($whatsAppOptedIn) {
+            SendClientWelcome::dispatch($client);
+        }
 
         return redirect()
             ->route('admin.clients.show', $client)
@@ -80,7 +88,15 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        $client->update($this->validated($request, $client));
+        $data = $this->validated($request, $client);
+        $whatsAppOptedIn = (bool) ($data['whatsapp_opt_in'] ?? false);
+        unset($data['whatsapp_opt_in']);
+
+        $data['whatsapp_opt_in_at'] = $whatsAppOptedIn
+            ? ($client->whatsapp_opt_in_at ?? now())
+            : null;
+
+        $client->update($data);
 
         return redirect()
             ->route('admin.clients.show', $client)
@@ -105,12 +121,13 @@ class ClientController extends Controller
         // once a client exists, so the big form no longer submits it on update.
         $nameRule = $client ? 'sometimes' : 'required';
 
-        return $request->validate([
+        $data = $request->validate([
             'membership_plan_id' => ['required', 'exists:membership_plans,id'],
             'first_name' => [$nameRule, 'string', 'max:100'],
             'last_name' => [$nameRule, 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255', 'unique:clients,email,'.($client?->id)],
             'phone' => ['required', 'string', 'max:20'],
+            'whatsapp_opt_in' => ['nullable', 'boolean'],
             'date_of_birth' => ['nullable', 'date'],
             'gender' => ['nullable', 'in:male,female,other'],
             'address' => ['nullable', 'string', 'max:255'],
@@ -123,5 +140,15 @@ class ClientController extends Controller
             'emergency_contact_phone' => ['nullable', 'string', 'max:20'],
             'notes' => ['nullable', 'string'],
         ]);
+
+        if ($request->boolean('whatsapp_opt_in')) {
+            $request->validate([
+                'phone' => ['regex:/^\+[1-9]\d{7,14}$/'],
+            ], [
+                'phone.regex' => 'Use an E.164 WhatsApp number, for example +14155552671.',
+            ]);
+        }
+
+        return $data;
     }
 }

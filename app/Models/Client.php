@@ -22,6 +22,7 @@ class Client extends Model
         'photo_path',
         'email',
         'phone',
+        'whatsapp_opt_in_at',
         'date_of_birth',
         'gender',
         'address',
@@ -40,6 +41,7 @@ class Client extends Model
         return [
             'date_of_birth' => 'date',
             'join_date' => 'date',
+            'whatsapp_opt_in_at' => 'datetime',
         ];
     }
 
