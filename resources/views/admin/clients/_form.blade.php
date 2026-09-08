@@ -26,6 +26,22 @@
         <x-text-input id="phone" name="phone" class="mt-1 block w-full" :value="old('phone', $c?->phone)" required />
         <x-input-error :messages="$errors->get('phone')" class="mt-2" />
     </div>
+    <div class="sm:col-span-2 rounded-md border border-gray-200 p-4">
+        <label for="whatsapp_opt_in" class="flex items-start gap-3 cursor-pointer">
+            <input id="whatsapp_opt_in" name="whatsapp_opt_in" type="checkbox" value="1"
+                @checked(old('whatsapp_opt_in', (bool) $c?->whatsapp_opt_in_at))
+                class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" />
+            <span>
+                <span class="block text-sm font-medium text-gray-700">
+                    Send a WhatsApp welcome message
+                </span>
+                <span class="block text-xs text-gray-500">
+                    Client consent is required. Use an E.164 phone number, e.g. +14155552671.
+                </span>
+            </span>
+        </label>
+        <x-input-error :messages="$errors->get('whatsapp_opt_in')" class="mt-2" />
+    </div>
     <div>
         <x-input-label for="membership_plan_id" value="Membership plan" />
         <select id="membership_plan_id" name="membership_plan_id" required
